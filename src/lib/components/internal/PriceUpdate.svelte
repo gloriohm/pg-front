@@ -5,6 +5,7 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import EnhancedForm from './EnhancedForm.svelte';
+	import MailToPilsguiden from './MailToPilsguiden.svelte';
 	let { id } = $props();
 	let newPrice = $state();
 	let dialog = $state(false);
@@ -31,7 +32,7 @@
 			<Dialog.Title>Oppdater pris</Dialog.Title>
 			<Dialog.Description>
 				Har prisen endret seg? Send oss gjerne ny pris. Oppgi prisen for enheten, vi tar oss av
-				konvertering til halvliterspris dersom baren har falt offer for shrinkflation. For å sikre
+				konvertering til halvliterspris. Dersom enheten har endret seg, send mail til <MailToPilsguiden />. For å sikre
 				datakvalitet, kontrollerer vi alle prisene som blir sendt inn. Det kan derfor ta litt tid
 				før prisen blir oppdatert på nettsiden.
 			</Dialog.Description>
