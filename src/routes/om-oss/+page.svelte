@@ -1,4 +1,6 @@
 <script lang="ts">
+	import MailToPilsguiden from "@/components/internal/MailToPilsguiden.svelte";
+
   export let data;
   const { about } = data;
 </script>
@@ -9,13 +11,13 @@
         <div class="flex flex-col gap-1">
             <p class="max-w-prose">
                 Pilsguiden ble etablert i september 2023 med et mål om å være den mest komplette
-                og oppdaterte siden for ølpriser i Norge. Akkurat nå er det {about.TotalBars}serveringssteder
+                og oppdaterte siden for ølpriser i Norge. Akkurat nå er det {about.total_bars}serveringssteder
                 på siden fordelt over alle fylkene med Svalbard. 
             </p>
             <p class="max-w-prose">
                 Ølprisen kan variere voldsomt i Norge.
-                Blant serveringsstedene på siden, koster den billigste ølen {about.MinPrice}kr
-                og den dyreste {about.MaxPrice}kr, noe som utgjør en forskjell på {about.PriceDiff}kr.* 
+                Blant serveringsstedene på siden, koster den billigste ølen {about.min_price}kr
+                og den dyreste {about.max_price}kr, noe som utgjør en forskjell på {about.price_dif}kr.* 
                 Pilsguiden ble til for å lose deg i retning et serveringssted som passer din økonomi og for å skape litt
                 forutsigbarhet når du ber om en pils.
             </p>
@@ -29,8 +31,7 @@
         <div class="max-w-prose flex flex-col gap-2">
             <p>
                 Ølprisene på Pilsguiden.no hentes inn ved nettdugnad. Brukere over hele landet
-                kan kontakte oss på <a href="mailto:pilsguiden@hotmail.com" class="underline">pilsguiden@hotmail.com</a>
-                {"for"} å melde inn priser. Da trenger vi navnet på serveringsstedet, prisen på et glass øl og størrelsen på glasset.
+                kan kontakte oss på <MailToPilsguiden /> for å melde inn priser. Da trenger vi navnet på serveringsstedet, prisen på et glass øl og størrelsen på glasset.
                 Prisen blir automatisk konvertert til halvliter-pris når vi legger det inn i systemet. Vi vil helst at du
                 også inkluderer hvilket bryggeri baren fører, da det er mulig å
                 filtrere listene våre slik at man kan finne steder som fører sitt favorittbryggeri.
