@@ -2,7 +2,6 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import PriceList from '@/components/internal/PriceList.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { H2 } from '@/styles/styles.js';
 	import { page } from '$app/stores';
 	let { data } = $props();
 	let { admin } = data;
@@ -17,7 +16,9 @@
 			{data.barObj.bar.address}
 		</Card.Description>
 		<Card.Action>
-			<Button href={url} variant="outline" size="sm">Rediger</Button>
+			{#if admin}
+				<Button href={url} variant="outline" size="sm">Rediger</Button>
+			{/if}
 		</Card.Action>
 	</Card.Header>
 	<Card.Content>
