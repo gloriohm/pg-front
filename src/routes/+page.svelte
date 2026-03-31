@@ -12,7 +12,7 @@
 	<div class="mb-4">
 		<p class="prose text-left">
 			Pilsguiden har samlet ølprisene fra <span class="font-bold">{data.home.total_bars}</span> serveringssteder over
-			hele landet. Bruke søkefeltet til å finne frem til fylket, kommunen eller bydelen din og sjekk
+			hele landet. Bruk søkefeltet til å finne frem til fylket, kommunen eller bydelen din og sjekk
 			hvor mye pilsen koster. Noen barer har tidsbestemte priser ⏰ og listen oppdateres i sanntid.
 		</p>
 	</div>
