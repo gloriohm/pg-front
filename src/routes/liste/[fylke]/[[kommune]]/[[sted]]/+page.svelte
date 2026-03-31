@@ -8,9 +8,9 @@
 
   const title = $derived(
 		$page.params.sted
-			? data.list.breadcrumb[2].name
+			? data.list.breadcrumb[2]?.name
 			: $page.params.kommune
-				? data.list.breadcrumb[1].name
+				? data.list.breadcrumb[1]?.name
 				: data.list.breadcrumb[0].name
 	);
 </script>
