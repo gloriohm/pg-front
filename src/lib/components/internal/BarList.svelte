@@ -13,8 +13,8 @@
 					<div
 						class="flex justify-between rounded-lg border-b-2 border-violet-300 px-4 py-2 font-semibold"
 					>
-						<span class="justify-left flex min-w-5 grow items-center">
-							<span>{b.name}</span>
+						<span class="flex min-w-0 grow items-center text-left">
+							<span class="wrap-break-word">{b.name}</span>
 						</span>
 						<span class="min-w-0 whitespace-nowrap">
 							{#if b.until_time}⏰{/if}
