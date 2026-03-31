@@ -7,7 +7,7 @@ export function apiFetch(endpoint, admin) {
 	};
 
 	if (admin?.accessToken && admin?.refreshToken) {
-		headers['Authorization'] = `Bearer ${userJwt}`;
+		headers['Authorization'] = `Bearer ${admin.accessToken}`;
 		headers['refresh-token'] = admin.refreshToken;
 	}
 	return fetch(`${PUBLIC_API_BASE}/api/v1${endpoint}`, {
