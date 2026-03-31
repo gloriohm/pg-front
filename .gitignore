@@ -1,0 +1,49 @@
+# --- frontend ---
+frontend/node_modules
+
+# Vite
+frontend/vite.config.js.timestamp-*
+frontend/vite.config.ts.timestamp-*
+
+# Output
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
+
+# --- general ---
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*~
+
+# Secrets and config
+.env
+.env.*
+!.env.example
+!.env.test
+*.key
+*.crt
+*.pem
+*.enc
+
+
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Editors
+.vscode/
+*.swp
+*.swo
+node_modules
+node_modules
