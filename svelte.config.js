@@ -4,10 +4,7 @@ import adapter from '@sveltejs/adapter-vercel';
 const config = {
 	kit: {
 		adapter: adapter(),
-		alias: {
-			'@/*': './src/lib/*',
-			$lib: 'src/lib'
-		}
+		alias: { '@/*': './src/lib/*', $lib: 'src/lib' }
 	}
 };
 
