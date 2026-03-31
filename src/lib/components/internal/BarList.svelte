@@ -1,5 +1,4 @@
 <script lang="js">
-	import * as Table from '$lib/components/ui/table/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { formatNorwegianDate, formatTime24Oslo } from '$lib/utils/dateTime.js';
@@ -7,7 +6,7 @@
 </script>
 
 <section class="mb-4 flex flex-col gap-1">
-	{#each bars as b}
+	{#each bars as b (b.id)}
 		<Dialog.Root>
 			<Dialog.Trigger>
 				<div class="w-full rounded-lg bg-violet-200 shadow-lg">
