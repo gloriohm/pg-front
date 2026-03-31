@@ -27,7 +27,7 @@
 </svelte:head>
 
 <Header />
-<main class="m-auto max-w-xl">
+<main class="m-auto max-w-xl max-sm:px-4">
 	<Toaster position="top-center" />
 	{@render children()}
 </main>
