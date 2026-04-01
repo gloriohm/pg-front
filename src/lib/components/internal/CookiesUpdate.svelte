@@ -12,7 +12,7 @@
 
 <Dialog.Root bind:open={dialog}>
 	<Dialog.Trigger class="font-light hover:cursor-pointer">Oppdater samtykke</Dialog.Trigger>
-	<Dialog.Content class="sm:max-w-[425px]">
+	<Dialog.Content class="sm:max-w-106.25">
 		<Dialog.Header>
 			<Dialog.Title>Trekke tilbake samtykke?</Dialog.Title>
 			<Dialog.Description>

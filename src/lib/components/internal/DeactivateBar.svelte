@@ -25,7 +25,7 @@
 	<Dialog.Trigger type="button" class={buttonVariants({ variant: 'destructive', size: 'icon' })}
 		><X /></Dialog.Trigger
 	>
-	<Dialog.Content class="sm:max-w-[425px]">
+	<Dialog.Content class="sm:max-w-106.25">
 		<Dialog.Header>
 			<Dialog.Title>Deaktiver bar</Dialog.Title>
 			<Dialog.Description>

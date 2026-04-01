@@ -1,8 +1,8 @@
 <script lang="js">
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import Label from '../ui/label/label.svelte';
-	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
-	import { formatNorwegianDate, formatTime24Oslo } from '$lib/utils/dateTime.js';
+	import { Button } from '$lib/components/ui/button/index.js';
+	import { formatNorwegianDate } from '$lib/utils/dateTime.js';
 	let { price } = $props();
 	let dialog = $state(false);
 </script>
@@ -11,7 +11,7 @@
 	<Dialog.Trigger type="button">
 		{#if !price.default}⏰{/if}{price.price},-
 	</Dialog.Trigger>
-	<Dialog.Content class="sm:max-w-[425px]">
+	<Dialog.Content class="sm:max-w-106.25">
 		<Dialog.Header>
 			<Dialog.Title>Prisinformasjon</Dialog.Title>
 			<Dialog.Description>Når du får pils til denne prisen</Dialog.Description>

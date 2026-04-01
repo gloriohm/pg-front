@@ -2,18 +2,15 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { X } from '@lucide/svelte';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import PriceList from '@/components/internal/PriceList.svelte';
 	import NewPrice from '@/components/internal/NewPrice.svelte';
-	import { enhance } from '$app/forms';
-	import { toast } from 'svelte-sonner';
 	import EnhancedForm from '@/components/internal/EnhancedForm.svelte';
 	import DeactivateBar from '@/components/internal/DeactivateBar.svelte';
 
 	let { data } = $props();
 	const { breweries, barPrice } = data;
-	const { bar, prices } = barPrice;
+	const { bar } = barPrice;
 
 	const formOpts = {
 		method: 'POST',
@@ -63,7 +60,7 @@
 						<div class="grid gap-2">
 							<Label for="brewery">Bryggeri</Label>
 							<select name="brewery" class="max-w-64" bind:value={barFields.brewery}>
-								{#each breweries as brew}
+								{#each breweries as brew (brew.id)}
 									<option value={brew.name}>{brew.name}</option>
 								{/each}
 							</select>

@@ -27,14 +27,14 @@
 	<Dialog.Trigger type="button" class={buttonVariants({ variant: 'default', size: 'icon' })}
 		><SquarePen /></Dialog.Trigger
 	>
-	<Dialog.Content class="sm:max-w-[425px]">
+	<Dialog.Content class="sm:max-w-106.25">
 		<Dialog.Header>
 			<Dialog.Title>Oppdater pris</Dialog.Title>
 			<Dialog.Description>
 				Har prisen endret seg? Send oss gjerne ny pris. Oppgi prisen for enheten, vi tar oss av
-				konvertering til halvliterspris. Dersom enheten har endret seg, send mail til <MailToPilsguiden />. For å sikre
-				datakvalitet, kontrollerer vi alle prisene som blir sendt inn. Det kan derfor ta litt tid
-				før prisen blir oppdatert på nettsiden.
+				konvertering til halvliterspris. Dersom enheten har endret seg, send mail til <MailToPilsguiden
+				/>. For å sikre datakvalitet, kontrollerer vi alle prisene som blir sendt inn. Det kan
+				derfor ta litt tid før prisen blir oppdatert på nettsiden.
 			</Dialog.Description>
 		</Dialog.Header>
 		<EnhancedForm class="grid gap-4 py-4" opts={formOpts}>
