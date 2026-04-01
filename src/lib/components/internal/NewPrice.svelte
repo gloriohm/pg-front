@@ -1,5 +1,4 @@
 <script lang="js">
-	import { PUBLIC_API_BASE } from '$env/static/public';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import * as Table from '$lib/components/ui/table/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
@@ -28,7 +27,7 @@
 	<Dialog.Trigger type="button" class={buttonVariants({ variant: 'default' })}
 		>Legg til ny pris</Dialog.Trigger
 	>
-	<Dialog.Content class="sm:max-w-[425px]">
+	<Dialog.Content class="sm:max-w-106.25">
 		<Dialog.Header>
 			<Dialog.Title>Legg til ny pris</Dialog.Title>
 			<Dialog.Description>Lager en ny tidsbestemt pris.</Dialog.Description>
@@ -90,14 +89,14 @@
 			<Table.Root class="mb-4 w-full table-fixed">
 				<Table.Header>
 					<Table.Row>
-						{#each days as day}
+						{#each days as day (day.value)}
 							<Table.Cell>{day.name}</Table.Cell>
 						{/each}
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
 					<Table.Row>
-						{#each days as day}
+						{#each days as day (day.value)}
 							<Table.Cell class="pointer-events-none">
 								<input
 									type="checkbox"

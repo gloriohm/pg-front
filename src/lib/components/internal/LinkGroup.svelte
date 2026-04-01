@@ -7,7 +7,7 @@
 		<NavigationMenu.Item>
 			<NavigationMenu.Trigger>Lenker</NavigationMenu.Trigger>
 			<NavigationMenu.Content>
-				<ul class="grid w-[200px] gap-4 p-2">
+				<ul class="grid w-50 gap-4 p-2">
 					<li>
 						<NavigationMenu.Link href="/om-oss">Om oss</NavigationMenu.Link>
 						<NavigationMenu.Link href="/media">Media</NavigationMenu.Link>
