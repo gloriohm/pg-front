@@ -43,7 +43,7 @@
 	</Dialog.Trigger>
 	<Dialog.Content class="sm:max-w-106.25">
 		<Dialog.Header>
-			<Dialog.Title>Bekreft pris</Dialog.Title>
+			<Dialog.Title>Velg tidspunkt</Dialog.Title>
 			<Dialog.Description>
 				Vi lever ikke alltid i sanntid. Legg inn ukedag og klokkeslett under for å se hva pilsen
 				koster på ønsket tidspunkt.
