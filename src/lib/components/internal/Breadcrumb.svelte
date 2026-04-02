@@ -1,6 +1,6 @@
 <script>
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
-	let { links } = $props();
+	let { links, opts } = $props();
 </script>
 
 <nav class="mb-4 ml-1">
@@ -12,7 +12,7 @@
 			{#each links as link (link.id)}
 				<Breadcrumb.Separator />
 				<Breadcrumb.Item>
-					<Breadcrumb.Link href={`/liste${link.slug}`}>{link.name}</Breadcrumb.Link>
+					<Breadcrumb.Link href={`/liste${link.slug}${opts}`}>{link.name}</Breadcrumb.Link>
 				</Breadcrumb.Item>
 			{/each}
 		</Breadcrumb.List>
