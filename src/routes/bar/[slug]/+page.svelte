@@ -1,8 +1,8 @@
 <script lang="js">
 	import * as Card from '$lib/components/ui/card/index.js';
-	import PriceList from '@/components/internal/PriceList.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { page } from '$app/stores';
+	import PriceCard from '@/components/internal/PriceCard.svelte';
 	let { data } = $props();
 	let { admin } = data;
 	const root = '/admin/update-bar/';
@@ -22,9 +22,6 @@
 		</Card.Action>
 	</Card.Header>
 	<Card.Content>
-		<div class="mb-4">
-			<p>Bryggeri: {data.barObj.bar.brewery}</p>
-		</div>
-		<PriceList prices={data.barObj.prices} />
+		<PriceCard drink={data.barObj.drink} />
 	</Card.Content>
 </Card.Root>

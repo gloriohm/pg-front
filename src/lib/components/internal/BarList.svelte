@@ -1,7 +1,7 @@
 <script lang="js">
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { formatNorwegianDate, formatTime24Oslo } from '$lib/utils/dateTime.js';
+	import { formatNorwegianDate } from '$lib/utils/dateTime.js';
 	let { bars } = $props();
 </script>
 
@@ -17,9 +17,9 @@
 							<span class="wrap-break-word">{b.name}</span>
 						</span>
 						<span class="min-w-0 whitespace-nowrap">
-							{#if b.until_time}⏰{/if}
-							{#if b.current_price !== b.current_pint}*{/if}
-							{b.current_pint},-
+							{#if !b.default_price}⏰{/if}
+							{#if b.price !== b.pint}*{/if}
+							{b.pint},-
 						</span>
 					</div>
 				</div>
@@ -32,11 +32,11 @@
 					<div class="flex gap-4">
 						<p class="flex gap-1">
 							<span class="font-semibold">Pris: </span>
-							<span>{b.current_price},- </span>
+							<span>{b.price},- </span>
 						</p>
 						<p class="flex gap-1">
 							<span class="font-semibold">Størrelse: </span>
-							<span>{b.current_size}l</span>
+							<span>{b.size}l</span>
 						</p>
 					</div>
 					<div class="flex gap-4">
@@ -57,15 +57,11 @@
 							<span>{b.address}</span>
 						</p>
 					</div>
-					{#if b.until_time}
-						<div class="flex gap-4">
-							<p class="flex gap-1">
-								<span class="font-semibold">Pris gyldig til: </span>
-								<span class="rounded bg-emerald-300 px-1">kl. {formatTime24Oslo(b.until_time)}</span
-								>
-							</p>
-						</div>
-					{/if}
+					<div class="flex gap-4">
+						<p class="flex gap-1">
+							<span class="rounded bg-emerald-300 px-1">{b.valid_to}</span>
+						</p>
+					</div>
 				</div>
 				<Dialog.Footer>
 					<Button href={`/bar/${b.slug}`}>Mer detaljer</Button>

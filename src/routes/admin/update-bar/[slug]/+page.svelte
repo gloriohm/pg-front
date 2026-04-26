@@ -9,8 +9,6 @@
 	import DeactivateBar from '@/components/internal/DeactivateBar.svelte';
 
 	let { data } = $props();
-	const { breweries, barPrice } = data;
-	const { bar } = barPrice;
 
 	const formOpts = {
 		method: 'POST',
@@ -34,7 +32,7 @@
 			<Card.Title>Oppdater bar</Card.Title>
 			<Card.Description>{data.barPrice.bar.name}</Card.Description>
 			<Card.Action>
-				<DeactivateBar id={bar.id} />
+				<DeactivateBar id={data.barPrice.bar.id} />
 			</Card.Action>
 		</Card.Header>
 		<Card.Content>
@@ -60,15 +58,15 @@
 						<div class="grid gap-2">
 							<Label for="brewery">Bryggeri</Label>
 							<select name="brewery" class="max-w-64" bind:value={barFields.brewery}>
-								{#each breweries as brew (brew.id)}
-									<option value={brew.name}>{brew.name}</option>
+								{#each data.breweries as brew (brew.id)}
+									<option value={brew.id}>{brew.name}</option>
 								{/each}
 							</select>
 						</div>
 
 						<PriceList prices={data.barPrice.prices} />
 
-						<NewPrice id={data.barPrice.bar.id} />
+						<NewPrice id={data.barPrice.drink.id} />
 
 						<div class="grid gap-2">
 							<Label for="orgnummer">Orgnummer</Label>
@@ -83,13 +81,16 @@
 							/>
 						</div>
 					</div>
-					<Input hidden name="id" value={bar.id} />
+					<Input hidden name="id" value={data.barPrice.bar.id} />
 				</EnhancedForm>
 			{/if}
 		</Card.Content>
 		<Card.Footer class="flex-col gap-2">
-			<Button type="reset" variant="outline" onclick={() => (barFields = bar)} class="w-full"
-				>Tilbakestill</Button
+			<Button
+				type="reset"
+				variant="outline"
+				onclick={() => (barFields = data.barPrice.bar)}
+				class="w-full">Tilbakestill</Button
 			>
 			<Button type="submit" class="w-full" form={formOpts.id}>Oppdater</Button>
 		</Card.Footer>

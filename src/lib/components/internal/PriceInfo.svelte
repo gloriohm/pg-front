@@ -21,28 +21,18 @@
 				<p>{price.price},- for {price.size}l tilsvarer {price.pint},- for en halvliter</p>
 			</div>
 		{/if}
-		{#if price.time?.days && price.time?.span}
-			<div class="flex justify-between">
-				<div class="grid gap-2">
-					<Label>Dager</Label>
-					<p>{price.time.days}</p>
-				</div>
-				<div class="grid gap-2">
-					<Label>Tid</Label>
-					<p>{price.time.span}</p>
-				</div>
+		<div class="flex justify-between">
+			<div class="grid gap-2">
+				<Label>Gyldighet</Label>
+				<p>{price.valid}</p>
 			</div>
-			<div class="flex justify-between">
-				<div class="grid gap-2">
-					<Label>Sist endret</Label>
-					<p>{formatNorwegianDate(price.price_updated)}</p>
-				</div>
-				<div class="grid gap-2">
-					<Label>Sist bekreftet</Label>
-					<p>{formatNorwegianDate(price.price_checked)}</p>
-				</div>
+		</div>
+		<div class="flex justify-between">
+			<div class="grid gap-2">
+				<Label>Sist bekreftet</Label>
+				<p>{formatNorwegianDate(price.price_checked)}</p>
 			</div>
-		{/if}
+		</div>
 		<Dialog.Footer>
 			<Button onclick={() => (dialog = false)}>Tilbake</Button>
 		</Dialog.Footer>

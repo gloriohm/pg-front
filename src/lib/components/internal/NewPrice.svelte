@@ -46,27 +46,14 @@
 						required
 					/>
 				</div>
-				<div class="grid gap-2">
-					<Label for="size">Str.</Label>
-					<Input
-						id="size"
-						name="size"
-						type="number"
-						step="0.01"
-						min="0.1"
-						placeholder="0.5"
-						class="max-w-xs"
-						required
-					/>
-				</div>
 			</div>
 			<div class="mb-4 flex gap-2">
 				<div class="grid gap-2">
-					<Label for="from_time">Fra kl.</Label>
+					<Label for="price_type">Pristype</Label>
 					<Input
-						id="from_time"
-						name="from_time"
-						type="time"
+						id="price_type"
+						name="price_type"
+						type="number"
 						min="09:00"
 						max="23:59"
 						step="60"
@@ -110,7 +97,7 @@
 					</Table.Row>
 				</Table.Body>
 			</Table.Root>
-			<Input hidden name="bar_id" value={id} />
+			<Input hidden name="drink_id" value={id} />
 		</EnhancedForm>
 		<Dialog.Footer class="flex-col gap-2">
 			<Button onclick={closeDialog} variant="outline">Tilbake</Button>

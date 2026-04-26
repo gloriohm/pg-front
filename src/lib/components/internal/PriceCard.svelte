@@ -1,60 +1,44 @@
 <script lang="js">
-	import * as Dialog from '$lib/components/ui/dialog/index.js';
+	import PriceConfirm from './PriceConfirm.svelte';
 	import PriceUpdate from './PriceUpdate.svelte';
-	import { buttonVariants } from '$lib/components/ui/button/index.js';
-	let { price } = $props();
-	let dialog = $state(false);
+	import { formatNorwegianDate } from '$lib/utils/dateTime.js';
+	import { H4 } from '@/styles/styles.js';
+
+	let { drink } = $props();
+	console.log(drink);
+
+	let sortedPrices = $derived(drink.prices.toSorted((a, b) => Number(b.active) - Number(a.active)));
+
+	let morePrices = $derived(drink.prices.length > 1);
 </script>
 
-<Dialog.Root bind:open={dialog}>
-	<Dialog.Trigger type="button" class={buttonVariants({ variant: 'default' })}>...</Dialog.Trigger>
-	<Dialog.Content class="sm:max-w-106.25">
-		<Dialog.Header>
-			<Dialog.Title>Prisinfo</Dialog.Title>
-		</Dialog.Header>
-		<div class="mb-5 flex items-start justify-between gap-4 border-b pb-4">
+<h4 class={H4}>
+	Pris{#if morePrices}er{/if}
+</h4>
+<div class="grid gap-2">
+	{#each sortedPrices as p (p.id)}
+		<div class="grid gap-2 rounded-xl bg-amber-200 px-4 py-2 shadow" class:bg-slate-200={!p.active}>
 			<div>
-				<p class="text-sm text-muted-foreground">Pris</p>
-				<div class="flex items-end gap-3">
-					<p class="text-3xl font-semibold tracking-tight">{price.price}</p>
-					<p class="pb-1 text-sm text-muted-foreground">{price.size} l</p>
-				</div>
+				<p class="text-xs">{p.valid}</p>
 			</div>
-
-			<div class="text-right">
-				<p class="text-sm text-muted-foreground">Halvliterpris</p>
-				<p class="text-lg font-medium">{price.pint}</p>
+			<div>
+				<div>
+					<p>
+						<span class="font-semibold">{p.price},-</span> for
+						<span class="font-semibold">{drink.size}l </span>
+						{drink.brewery}
+						{#if p.price !== p.pint}
+							| tilsvarer {p.pint},- for 0.5l{/if}
+					</p>
+				</div>
+				<div class="flex grow justify-between">
+					<p class="text-xs">Sist sjekket {formatNorwegianDate(p.price_checked)}</p>
+					<div>
+						<PriceUpdate id={p.id} />
+						<PriceConfirm id={p.id} />
+					</div>
+				</div>
 			</div>
 		</div>
-
-		<dl class="grid gap-x-8 gap-y-4 sm:grid-cols-2">
-			<div>
-				<dt class="text-sm text-muted-foreground">Standardpris</dt>
-				<dd class="mt-1 font-medium">{price.default ? 'Ja' : 'Nei'}</dd>
-			</div>
-
-			<div>
-				<dt class="text-sm text-muted-foreground">Sist oppdatert</dt>
-				<dd class="mt-1 font-medium">{price.price_updated}</dd>
-			</div>
-
-			<div>
-				<dt class="text-sm text-muted-foreground">Sist bekreftet</dt>
-				<dd class="mt-1 font-medium">{price.price_checked}</dd>
-			</div>
-
-			{#if !price.default}
-				<div class="sm:col-span-2">
-					<dt class="text-sm text-muted-foreground">Tilgjengelig</dt>
-					<dd class="mt-1 space-y-1">
-						<p class="font-medium">{price.time.days}</p>
-						<p class="text-sm text-muted-foreground">{price.time.span}</p>
-					</dd>
-				</div>
-			{/if}
-		</dl>
-		<Dialog.Footer>
-			<PriceUpdate id={price.id} />
-		</Dialog.Footer>
-	</Dialog.Content>
-</Dialog.Root>
+	{/each}
+</div>

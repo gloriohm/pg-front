@@ -13,14 +13,14 @@ export async function load({ params }) {
 }
 
 export const actions = {
-	updateBar: async ({ request, fetch, cookies, params }) => {
+	updateBar: async ({ request, cookies, params }) => {
 		const admin = createAdminObject(cookies);
 		const form = Object.fromEntries(await request.formData());
 		const payload = {
 			id: Number(form.id),
 			name: form.name,
 			address: form.address,
-			brewery: form.brewery,
+			brewery: Number(form.brewery),
 			orgnummer: form.orgnummer
 		};
 		console.log(payload);
@@ -43,7 +43,7 @@ export const actions = {
 
 		return { success: true };
 	},
-	deactivateBar: async ({ request, fetch, cookies }) => {
+	deactivateBar: async ({ request, cookies }) => {
 		const admin = createAdminObject(cookies);
 		const form = Object.fromEntries(await request.formData());
 		const payload = {
@@ -63,7 +63,7 @@ export const actions = {
 
 		return { success: true };
 	},
-	newPrice: async ({ request, fetch, cookies }) => {
+	newPrice: async ({ request, cookies }) => {
 		const admin = createAdminObject(cookies);
 		const formData = await request.formData();
 		const form = Object.fromEntries(formData);
