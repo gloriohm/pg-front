@@ -8,7 +8,7 @@
 	import EnhancedForm from '@/components/internal/EnhancedForm.svelte';
 	import DeactivateBar from '@/components/internal/DeactivateBar.svelte';
 
-	let { data } = $props();
+	let { data, form } = $props();
 
 	const formOpts = {
 		method: 'POST',
@@ -18,14 +18,13 @@
 		failureMsg: 'Noe gikk galt...'
 	};
 
-	const initial = $derived({
-		name: data.barPrice.name,
-		address: data.barPrice.address,
-		brewery: data.barPrice.brewery_id,
-		orgnummer: data.barPrice.orgnummer
-	});
+	let barFields = $state({ ...data.barPrice });
 
-	let barFields = $state(initial);
+	$effect(() => {
+		if (form?.success) {
+			barFields = { ...data.barPrice };
+		}
+	});
 </script>
 
 <div class="mt-8 flex items-center justify-center">
@@ -59,7 +58,7 @@
 
 						<div class="grid gap-2">
 							<Label for="brewery">Bryggeri</Label>
-							<select name="brewery" class="max-w-64" bind:value={barFields.brewery}>
+							<select name="brewery" class="max-w-64" bind:value={barFields.brewery_id}>
 								{#each data.breweries as brew (brew.id)}
 									<option value={brew.id}>{brew.name}</option>
 								{/each}
@@ -88,8 +87,11 @@
 			{/if}
 		</Card.Content>
 		<Card.Footer class="flex-col gap-2">
-			<Button type="reset" variant="outline" onclick={() => (barFields = initial)} class="w-full"
-				>Tilbakestill</Button
+			<Button
+				type="reset"
+				variant="outline"
+				onclick={() => (barFields = data.barPrice)}
+				class="w-full">Tilbakestill</Button
 			>
 			<Button type="submit" class="w-full" form={formOpts.id}>Oppdater</Button>
 		</Card.Footer>
