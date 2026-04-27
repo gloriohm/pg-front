@@ -4,12 +4,11 @@
 	import { formatNorwegianDate } from '$lib/utils/dateTime.js';
 	import { H4 } from '@/styles/styles.js';
 
-	let { drink } = $props();
-	console.log(drink);
+	let { prices, brewery, size } = $props();
 
-	let sortedPrices = $derived(drink.prices.toSorted((a, b) => Number(b.active) - Number(a.active)));
+	let sortedPrices = $derived(prices.toSorted((a, b) => Number(b.active) - Number(a.active)));
 
-	let morePrices = $derived(drink.prices.length > 1);
+	let morePrices = $derived(prices.length > 1);
 </script>
 
 <h4 class={H4}>
@@ -25,8 +24,8 @@
 				<div>
 					<p>
 						<span class="font-semibold">{p.price},-</span> for
-						<span class="font-semibold">{drink.size}l </span>
-						{drink.brewery}
+						<span class="font-semibold">{size}l </span>
+						{brewery}
 						{#if p.price !== p.pint}
 							| tilsvarer {p.pint},- for 0.5l{/if}
 					</p>

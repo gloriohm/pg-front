@@ -7,13 +7,14 @@
 	let { admin } = data;
 	const root = '/admin/update-bar/';
 	const url = root + $page.params.slug;
+	console.log(data.barObj);
 </script>
 
 <Card.Root>
 	<Card.Header>
-		<Card.Title>{data.barObj.bar.name}</Card.Title>
+		<Card.Title>{data.barObj.name}</Card.Title>
 		<Card.Description>
-			{data.barObj.bar.address}
+			{data.barObj.address}
 		</Card.Description>
 		<Card.Action>
 			{#if admin}
@@ -22,6 +23,6 @@
 		</Card.Action>
 	</Card.Header>
 	<Card.Content>
-		<PriceCard drink={data.barObj.drink} />
+		<PriceCard prices={data.barObj.prices} brewery={data.barObj.brewery} size={data.barObj.size} />
 	</Card.Content>
 </Card.Root>
