@@ -42,7 +42,7 @@
 					<div class="flex gap-4">
 						<p class="flex gap-1">
 							<span class="font-semibold">Differanse:</span>
-							<span>{p.price_dif},-</span>
+							<span>{p.price - p.current_price},-</span>
 						</p>
 					</div>
 					<div class="flex gap-4">

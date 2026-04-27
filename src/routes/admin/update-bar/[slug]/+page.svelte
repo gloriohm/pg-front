@@ -18,21 +18,23 @@
 		failureMsg: 'Noe gikk galt...'
 	};
 
-	let barFields = $state({
-		name: data.barPrice.bar.name,
-		address: data.barPrice.bar.address,
-		brewery: data.barPrice.bar.brewery,
-		orgnummer: data.barPrice.bar.orgnummer
+	const initial = $derived({
+		name: data.barPrice.name,
+		address: data.barPrice.address,
+		brewery: data.barPrice.brewery_id,
+		orgnummer: data.barPrice.orgnummer
 	});
+
+	let barFields = $state(initial);
 </script>
 
 <div class="mt-8 flex items-center justify-center">
 	<Card.Root class="-my-4 w-full max-w-sm">
 		<Card.Header>
 			<Card.Title>Oppdater bar</Card.Title>
-			<Card.Description>{data.barPrice.bar.name}</Card.Description>
+			<Card.Description>{data.barPrice.name}</Card.Description>
 			<Card.Action>
-				<DeactivateBar id={data.barPrice.bar.id} />
+				<DeactivateBar id={data.barPrice.id} />
 			</Card.Action>
 		</Card.Header>
 		<Card.Content>
@@ -64,9 +66,9 @@
 							</select>
 						</div>
 
-						<PriceList prices={data.barPrice.prices} />
+						<PriceList prices={data.barPrice.prices} size={data.barPrice.size} />
 
-						<NewPrice id={data.barPrice.drink.id} />
+						<NewPrice id={data.barPrice.drink_id} />
 
 						<div class="grid gap-2">
 							<Label for="orgnummer">Orgnummer</Label>
@@ -81,16 +83,13 @@
 							/>
 						</div>
 					</div>
-					<Input hidden name="id" value={data.barPrice.bar.id} />
+					<Input hidden name="id" value={data.barPrice.id} />
 				</EnhancedForm>
 			{/if}
 		</Card.Content>
 		<Card.Footer class="flex-col gap-2">
-			<Button
-				type="reset"
-				variant="outline"
-				onclick={() => (barFields = data.barPrice.bar)}
-				class="w-full">Tilbakestill</Button
+			<Button type="reset" variant="outline" onclick={() => (barFields = initial)} class="w-full"
+				>Tilbakestill</Button
 			>
 			<Button type="submit" class="w-full" form={formOpts.id}>Oppdater</Button>
 		</Card.Footer>

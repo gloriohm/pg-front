@@ -20,7 +20,7 @@ export const actions = {
 			id: Number(form.id),
 			name: form.name,
 			address: form.address,
-			brewery: Number(form.brewery),
+			brewery_id: Number(form.brewery),
 			orgnummer: form.orgnummer
 		};
 		console.log(payload);

@@ -2,6 +2,7 @@ import { apiFetch } from '@/utils/api.js';
 
 export async function load({ params }) {
 	const path = `/bars/${params.slug}`;
+	console.log(path);
 	const res = await apiFetch(path);
 	if (!res.ok) {
 		throw new Error('Failed to load bar data');
