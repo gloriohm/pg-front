@@ -8,6 +8,7 @@
 	import EnhancedForm from '@/components/internal/EnhancedForm.svelte';
 	import DeactivateBar from '@/components/internal/DeactivateBar.svelte';
 	import PriceSchedule from '@/components/internal/PriceSchedule.svelte';
+	import UpdateBrewery from '@/components/internal/UpdateBrewery.svelte';
 
 	let { data, form } = $props();
 
@@ -58,12 +59,15 @@
 						</div>
 
 						<div class="grid gap-2">
-							<Label for="brewery">Bryggeri</Label>
-							<select name="brewery" class="max-w-64" bind:value={barFields.brewery_id}>
-								{#each data.breweries as brew (brew.id)}
-									<option value={brew.id}>{brew.name}</option>
-								{/each}
-							</select>
+							<Label>Bryggeri:</Label>
+							<div class="flex items-center gap-2">
+								<p>{data.barPrice.brewery}</p>
+								<UpdateBrewery
+									drinkID={data.barPrice.drink_id}
+									currentBrew={data.barPrice.brewery_id}
+									breweries={data.breweries}
+								/>
+							</div>
 						</div>
 
 						<PriceList prices={data.barPrice.prices} size={data.barPrice.size} />
