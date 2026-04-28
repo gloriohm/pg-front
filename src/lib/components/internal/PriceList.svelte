@@ -3,7 +3,9 @@
 	import PriceConfirm from './PriceConfirm.svelte';
 	import PriceUpdate from './PriceUpdate.svelte';
 	import { formatNorwegianDate } from '$lib/utils/dateTime.js';
+	import PriceDelete from './PriceDelete.svelte';
 	let { prices, size } = $props();
+	console.log(prices);
 </script>
 
 <section>
@@ -23,6 +25,7 @@
 					<Table.Cell>{size}l</Table.Cell>
 					<Table.Cell>{formatNorwegianDate(p.price_checked)}</Table.Cell>
 					<Table.Cell class="text-end">
+						<PriceDelete id={p.id} />
 						<PriceUpdate id={p.id} />
 						<PriceConfirm id={p.id} />
 					</Table.Cell>

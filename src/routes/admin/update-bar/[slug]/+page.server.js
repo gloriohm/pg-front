@@ -68,12 +68,11 @@ export const actions = {
 		const formData = await request.formData();
 		const form = Object.fromEntries(formData);
 		const payload = {
-			bar_id: Number(form.bar_id),
+			drink_id: Number(form.drink_id),
 			price: Number(form.price),
-			size: Number(form.size),
+			price_type: form.price_type,
 			days: formData.getAll('days'),
-			from_time: form.from_time,
-			until_time: form.until_time
+			time: form.time
 		};
 		console.log(payload);
 
@@ -121,6 +120,26 @@ export const actions = {
 		console.log(payload);
 
 		const res = await apiPost('/admin/brewery/update-brewery', payload, admin);
+
+		if (!res.ok) {
+			const text = await res.text();
+			console.log(text);
+			return fail(res.status, { error: text });
+		}
+
+		checkUpdatedTokens(res, cookies);
+
+		return { success: true };
+	},
+	deletePrice: async ({ request, cookies }) => {
+		const admin = createAdminObject(cookies);
+		const form = Object.fromEntries(await request.formData());
+		const payload = {
+			price_id: Number(form.price_id)
+		};
+		console.log(payload);
+
+		const res = await apiPost('/admin/prices/delete-price', payload, admin);
 
 		if (!res.ok) {
 			const text = await res.text();

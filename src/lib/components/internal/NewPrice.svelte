@@ -9,6 +9,9 @@
 	let { id } = $props();
 	let dialog = $state(false);
 
+	let selectedPriceType = $state('whole_day');
+	let disabled = $derived(selectedPriceType == 'whole_day');
+
 	function closeDialog() {
 		dialog = false;
 	}
@@ -30,7 +33,11 @@
 	<Dialog.Content class="sm:max-w-106.25">
 		<Dialog.Header>
 			<Dialog.Title>Legg til ny pris</Dialog.Title>
-			<Dialog.Description>Lager en ny tidsbestemt pris.</Dialog.Description>
+			<Dialog.Description
+				>Ny pris er alltid tidsbestemt pris. En pris gjelder én eller flere business-dager. En
+				business-dag var fra kl 09 til 03 dagen etter. Dersom prisen begynner eller slutter etter
+				midnatt, er det likevel dagen da baren åpner som skal registreres.</Dialog.Description
+			>
 		</Dialog.Header>
 		<EnhancedForm opts={formOpts}>
 			<div class="mb-4 flex gap-2">
@@ -50,26 +57,22 @@
 			<div class="mb-4 flex gap-2">
 				<div class="grid gap-2">
 					<Label for="price_type">Pristype</Label>
-					<Input
-						id="price_type"
-						name="price_type"
-						type="number"
-						min="09:00"
-						max="23:59"
-						step="60"
-						class="max-w-xs"
-						required
-					/>
+					<select id="price_type" name="price_type" class="max-w-64" bind:value={selectedPriceType}>
+						<option value="whole_day">Hele dagen</option>
+						<option value="before_time">Før klokkeslett</option>
+						<option value="after_time">Etter klokkeslett</option>
+					</select>
 				</div>
 				<div class="grid gap-2">
-					<Label for="until_time">Fra kl.</Label>
+					<Label for="time">Klokkeslett</Label>
 					<Input
-						id="until_time"
-						name="until_time"
+						id="time"
+						name="time"
 						type="time"
-						step="60"
+						step="3600"
 						class="max-w-xs"
-						required
+						{disabled}
+						required={!disabled}
 					/>
 				</div>
 			</div>
