@@ -88,5 +88,26 @@ export const actions = {
 		checkUpdatedTokens(res, cookies);
 
 		return { success: true };
+	},
+	recreateSchedule: async ({ request, cookies }) => {
+		const admin = createAdminObject(cookies);
+		const formData = await request.formData();
+		const form = Object.fromEntries(formData);
+		const payload = {
+			drink_id: Number(form.drink_id)
+		};
+		console.log(payload);
+
+		const res = await apiPost('/admin/prices/recreate-schedule', payload, admin);
+
+		if (!res.ok) {
+			const text = await res.text();
+			console.log(text);
+			return fail(res.status, { error: text });
+		}
+
+		checkUpdatedTokens(res, cookies);
+
+		return { success: true };
 	}
 };

@@ -7,6 +7,7 @@
 	import NewPrice from '@/components/internal/NewPrice.svelte';
 	import EnhancedForm from '@/components/internal/EnhancedForm.svelte';
 	import DeactivateBar from '@/components/internal/DeactivateBar.svelte';
+	import PriceSchedule from '@/components/internal/PriceSchedule.svelte';
 
 	let { data, form } = $props();
 
@@ -66,8 +67,10 @@
 						</div>
 
 						<PriceList prices={data.barPrice.prices} size={data.barPrice.size} />
-
-						<NewPrice id={data.barPrice.drink_id} />
+						<div class="grid gap-2">
+							<NewPrice id={data.barPrice.drink_id} />
+							<PriceSchedule id={data.barPrice.drink_id} />
+						</div>
 
 						<div class="grid gap-2">
 							<Label for="orgnummer">Orgnummer</Label>
