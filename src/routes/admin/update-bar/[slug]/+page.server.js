@@ -43,15 +43,15 @@ export const actions = {
 
 		return { success: true };
 	},
-	deactivateBar: async ({ request, cookies }) => {
+	deleteBar: async ({ request, cookies }) => {
 		const admin = createAdminObject(cookies);
 		const form = Object.fromEntries(await request.formData());
 		const payload = {
-			id: Number(form.id)
+			bar_id: Number(form.bar_id)
 		};
 		console.log(payload);
 
-		const res = await apiPost('/admin/bars/deactivate-bar', payload, admin);
+		const res = await apiPost('/admin/bars/delete-bar', payload, admin);
 
 		if (!res.ok) {
 			const text = await res.text();

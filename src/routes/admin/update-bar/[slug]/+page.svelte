@@ -6,7 +6,7 @@
 	import PriceList from '@/components/internal/PriceList.svelte';
 	import NewPrice from '@/components/internal/NewPrice.svelte';
 	import EnhancedForm from '@/components/internal/EnhancedForm.svelte';
-	import DeactivateBar from '@/components/internal/DeactivateBar.svelte';
+	import DeactivateBar from '@/components/internal/DeleteBar.svelte';
 	import PriceSchedule from '@/components/internal/PriceSchedule.svelte';
 	import UpdateBrewery from '@/components/internal/UpdateBrewery.svelte';
 
