@@ -1,0 +1,8 @@
+{
+	"rewrites": [
+		{
+			"source": "/api/:path*",
+			"destination": "https://pilsguiden-back.onrender.com/:path*"
+		}
+	]
+}
