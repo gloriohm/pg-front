@@ -10,7 +10,7 @@
 		method: 'POST',
 		id: 'create-bar',
 		action: '',
-		successMsg: 'Bar oppdatert!',
+		successMsg: 'Bar opprettet!',
 		failureMsg: 'Noe gikk galt...'
 	};
 </script>
@@ -41,7 +41,7 @@
 
 					<div class="flex gap-2">
 						<div class="grid gap-2">
-							<Label for="price">Pris</Label>
+							<Label for="price">Vanlig pris</Label>
 							<Input id="price" name="price" type="number" min="20" placeholder="69" required />
 						</div>
 						<div class="grid gap-2">
