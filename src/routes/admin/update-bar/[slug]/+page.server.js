@@ -150,5 +150,27 @@ export const actions = {
 		checkUpdatedTokens(res, cookies);
 
 		return { success: true };
+	},
+	changeSize: async ({ request, cookies }) => {
+		const admin = createAdminObject(cookies);
+		const form = Object.fromEntries(await request.formData());
+		const payload = {
+			drink_id: Number(form.drink_id),
+			size: Number(form.size),
+			price: Number(form.price)
+		};
+		console.log(payload);
+
+		const res = await apiPost('/admin/prices/update-size', payload, admin);
+
+		if (!res.ok) {
+			const text = await res.text();
+			console.log(text);
+			return fail(res.status, { error: text });
+		}
+
+		checkUpdatedTokens(res, cookies);
+
+		return { success: true };
 	}
 };

@@ -9,6 +9,7 @@
 	import DeactivateBar from '@/components/internal/DeleteBar.svelte';
 	import PriceSchedule from '@/components/internal/PriceSchedule.svelte';
 	import UpdateBrewery from '@/components/internal/UpdateBrewery.svelte';
+	import ChangeSize from '@/components/internal/ChangeSize.svelte';
 
 	let { data, form } = $props();
 
@@ -67,6 +68,12 @@
 									currentBrew={data.barPrice.brewery_id}
 									breweries={data.breweries}
 								/>
+							</div>
+						</div>
+
+						<div class="grid gap-2">
+							<div class="flex items-center gap-2">
+								<ChangeSize id={data.barPrice.drink_id} size={data.barPrice.size} />
 							</div>
 						</div>
 

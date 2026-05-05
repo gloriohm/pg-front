@@ -5,7 +5,7 @@
 	const links = [
 		{ id: 0, url: root, name: 'Dashboard' },
 		{ id: 1, url: root + '/create-bar', name: 'Ny bar' },
-		{ id: 2, url: root + '/create-brewery', name: 'Nytt bryggeri' }
+		{ id: 2, url: root + '/opprett-bryggeri', name: 'Nytt bryggeri' }
 	];
 </script>
 
