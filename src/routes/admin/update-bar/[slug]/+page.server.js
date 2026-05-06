@@ -172,5 +172,30 @@ export const actions = {
 		checkUpdatedTokens(res, cookies);
 
 		return { success: true };
+	},
+	updatePriceTime: async ({ request, cookies }) => {
+		const admin = createAdminObject(cookies);
+		const formData = await request.formData();
+		const form = Object.fromEntries(formData);
+		const payload = {
+			id: Number(form.target_id),
+			price: Number(form.price),
+			price_type: form.price_type,
+			days: formData.getAll('days'),
+			time: form.time
+		};
+		console.log(payload);
+
+		const res = await apiPost('/admin/prices/update-time', payload, admin);
+
+		if (!res.ok) {
+			const text = await res.text();
+			console.log(text);
+			return fail(res.status, { error: text });
+		}
+
+		checkUpdatedTokens(res, cookies);
+
+		return { success: true };
 	}
 };

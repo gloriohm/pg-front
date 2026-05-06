@@ -2,6 +2,7 @@
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import EditPriceTimeForm from './EditPriceTimeForm.svelte';
+	import { ClipboardClock } from '@lucide/svelte';
 	let { id } = $props();
 	let dialog = $state(false);
 
@@ -11,21 +12,21 @@
 
 	const formOpts = {
 		method: 'POST',
-		id: 'new-price',
-		action: '?/newPrice',
-		successMsg: 'Pris registrert!',
+		id: 'update-time',
+		action: '?/updatePriceTime',
+		successMsg: 'Oppdatert!',
 		failureMsg: 'Noe gikk galt...',
 		onSuccess: closeDialog
 	};
 </script>
 
 <Dialog.Root bind:open={dialog}>
-	<Dialog.Trigger type="button" class={buttonVariants({ variant: 'default' })}
-		>Legg til ny pris</Dialog.Trigger
+	<Dialog.Trigger type="button" class={buttonVariants({ variant: 'default', size: 'icon' })}
+		><ClipboardClock /></Dialog.Trigger
 	>
 	<Dialog.Content class="sm:max-w-106.25">
 		<Dialog.Header>
-			<Dialog.Title>Legg til ny pris</Dialog.Title>
+			<Dialog.Title>Endre tidspunkt</Dialog.Title>
 			<Dialog.Description
 				>Ny pris er alltid tidsbestemt pris. En pris gjelder én eller flere business-dager. En
 				business-dag var fra kl 09 til 03 dagen etter. Dersom prisen begynner eller slutter etter
