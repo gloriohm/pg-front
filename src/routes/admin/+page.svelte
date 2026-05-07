@@ -1,7 +1,7 @@
 <script>
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { formatNorwegianDate } from '$lib/utils/dateTime.js';
+	import { formatNorwegianDate, formatDateTime } from '$lib/utils/dateTime.js';
 	import EnhancedForm from '@/components/internal/EnhancedForm.svelte';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { H2 } from '@/styles/styles.js';
@@ -60,7 +60,7 @@
 					<div class="flex gap-4">
 						<p class="flex gap-1">
 							<span class="font-semibold">Pris sendt inn: </span>
-							<span>{formatNorwegianDate(p.price_reported)}</span>
+							<span>{formatDateTime(p.price_reported)}</span>
 						</p>
 					</div>
 					<Input hidden name="id" value={p.id} />
