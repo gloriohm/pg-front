@@ -68,7 +68,7 @@ export const actions = {
 		const formData = await request.formData();
 		const form = Object.fromEntries(formData);
 		const payload = {
-			drink_id: Number(form.drink_id),
+			drink_id: Number(form.target_id),
 			price: Number(form.price),
 			price_type: form.price_type,
 			days: formData.getAll('days'),
@@ -178,7 +178,7 @@ export const actions = {
 		const formData = await request.formData();
 		const form = Object.fromEntries(formData);
 		const payload = {
-			id: Number(form.target_id),
+			price_id: Number(form.target_id),
 			price: Number(form.price),
 			price_type: form.price_type,
 			days: formData.getAll('days'),
