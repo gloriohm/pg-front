@@ -1,6 +1,6 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import { apiPost, apiFetch } from '@/utils/api.js';
-import { checkAndSetRefreshTokens, createAdminObject } from '@/transport/auth';
+import { createAdminObject } from '@/transport/auth';
 
 export async function load({ params }) {
 	const res = await apiFetch(`/bars/${params.slug}`);
@@ -12,7 +12,7 @@ export async function load({ params }) {
 }
 
 export const actions = {
-	updatePrice: async ({ request, fetch, cookies }) => {
+	updatePrice: async ({ request, cookies }) => {
 		const form = Object.fromEntries(await request.formData());
 		const payload = {
 			price_id: Number(form.price_id),
@@ -34,7 +34,7 @@ export const actions = {
 
 		return { success: true };
 	},
-	confirmPrice: async ({ request, fetch }) => {
+	confirmPrice: async ({ request }) => {
 		const form = Object.fromEntries(await request.formData());
 
 		const payload = {

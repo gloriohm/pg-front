@@ -1,13 +1,11 @@
 <script lang="js">
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { page } from '$app/stores';
 	import PriceCard from '@/components/internal/PriceCard.svelte';
 	let { data } = $props();
-	let { admin } = data;
+	let admin = $derived(data.admin);
 	const root = '/admin/update-bar/';
-	const url = root + $page.params.slug;
-	console.log(data.barObj);
+	let url = $derived(root + data.barObj.slug);
 </script>
 
 <Card.Root>
