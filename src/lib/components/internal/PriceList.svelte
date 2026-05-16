@@ -26,8 +26,10 @@
 					<Table.Cell>{size}l</Table.Cell>
 					<Table.Cell>{formatNorwegianDate(p.price_checked)}</Table.Cell>
 					<Table.Cell class="text-end">
-						<PriceDelete id={p.id} />
-						<PriceUpdateTime id={p.id} />
+						{#if p.price_type !== 1}
+							<PriceDelete id={p.id} />
+							<PriceUpdateTime id={p.id} />
+						{/if}
 						<PriceUpdate id={p.id} />
 						<PriceConfirm id={p.id} />
 					</Table.Cell>

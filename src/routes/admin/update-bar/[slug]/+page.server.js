@@ -2,8 +2,9 @@ import { fail, redirect } from '@sveltejs/kit';
 import { apiPost, apiFetch } from '@/utils/api.js';
 import { checkUpdatedTokens, createAdminObject } from '@/transport/auth';
 
-export async function load({ params }) {
-	const res = await apiFetch(`/bars/${params.slug}`);
+export async function load({ params, cookies }) {
+	const admin = createAdminObject(cookies);
+	const res = await apiFetch(`/admin/bars/${params.slug}`, admin);
 	if (!res.ok) {
 		throw new Error('Failed to load bar data');
 	}
