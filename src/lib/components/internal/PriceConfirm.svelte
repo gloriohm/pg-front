@@ -37,7 +37,7 @@
 		</EnhancedForm>
 		<Dialog.Footer class="flex-col gap-2">
 			<Button onclick={closeDialog} variant="outline">Tilbake</Button>
-			<Button type="submit" form={formOpts.id}>Oppdater</Button>
+			<Button type="submit" form={formOpts.id}>Bekreft</Button>
 		</Dialog.Footer>
 	</Dialog.Content>
 </Dialog.Root>
