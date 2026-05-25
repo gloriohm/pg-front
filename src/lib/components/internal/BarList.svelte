@@ -1,7 +1,7 @@
 <script lang="js">
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { formatNorwegianDate } from '$lib/utils/dateTime.js';
+	import BarCard from './BarCard.svelte';
 	let { bars } = $props();
 </script>
 
@@ -28,41 +28,7 @@
 				<Dialog.Header>
 					<Dialog.Title>{b.name}</Dialog.Title>
 				</Dialog.Header>
-				<div>
-					<div class="flex gap-4">
-						<p class="flex gap-1">
-							<span class="font-semibold">Pris: </span>
-							<span>{b.price},- </span>
-						</p>
-						<p class="flex gap-1">
-							<span class="font-semibold">Størrelse: </span>
-							<span>{b.size}l</span>
-						</p>
-					</div>
-					<div class="flex gap-4">
-						<p class="flex gap-1">
-							<span class="font-semibold">Bryggeri: </span>
-							<span>{b.brewery} </span>
-						</p>
-					</div>
-					<div class="flex gap-4">
-						<p class="flex gap-1">
-							<span class="font-semibold">Pris sjekket: </span>
-							<span>{formatNorwegianDate(b.price_checked)}</span>
-						</p>
-					</div>
-					<div class="flex gap-4">
-						<p class="flex gap-1">
-							<span class="font-semibold">Adresse: </span>
-							<span>{b.address}</span>
-						</p>
-					</div>
-					<div class="flex gap-4">
-						<p class="flex gap-1">
-							<span class="rounded bg-emerald-300 px-1">{b.valid_to}</span>
-						</p>
-					</div>
-				</div>
+				<BarCard bar={b} />
 				<Dialog.Footer>
 					<Button href={`/bar/${b.slug}`}>Mer detaljer</Button>
 				</Dialog.Footer>

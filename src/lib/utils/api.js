@@ -31,3 +31,10 @@ export function apiPost(endpoint, data, admin) {
 		body: JSON.stringify(data)
 	});
 }
+
+export async function getBarByID(id) {
+	const params = new URLSearchParams({ id: id });
+	const res = await fetch(`/bff/bar?${params}`);
+	const bar = await res.json();
+	return bar;
+}
