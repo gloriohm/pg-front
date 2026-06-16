@@ -6,7 +6,6 @@
 	import PriceDelete from './PriceDelete.svelte';
 	import PriceUpdateTime from './PriceUpdateTime.svelte';
 	let { prices, size } = $props();
-	console.log(prices);
 </script>
 
 <section>
@@ -26,9 +25,9 @@
 					<Table.Cell>{size}l</Table.Cell>
 					<Table.Cell>{formatNorwegianDate(p.price_checked)}</Table.Cell>
 					<Table.Cell class="text-end">
-						{#if p.price_type !== 1}
+						{#if p.price_type !== ''}
 							<PriceDelete id={p.id} />
-							<PriceUpdateTime id={p.id} />
+							<PriceUpdateTime price={p} />
 						{/if}
 						<PriceUpdate id={p.id} />
 						<PriceConfirm id={p.id} />

@@ -3,7 +3,7 @@
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import EditPriceTimeForm from './EditPriceTimeForm.svelte';
 	import { ClipboardClock } from '@lucide/svelte';
-	let { id } = $props();
+	let { price } = $props();
 	let dialog = $state(false);
 
 	function closeDialog() {
@@ -33,7 +33,7 @@
 				midnatt, er det likevel dagen da baren åpner som skal registreres.</Dialog.Description
 			>
 		</Dialog.Header>
-		<EditPriceTimeForm {id} {formOpts} />
+		<EditPriceTimeForm id={price.id} current={price} {formOpts} />
 		<Dialog.Footer class="flex-col gap-2">
 			<Button onclick={closeDialog} variant="outline">Tilbake</Button>
 			<Button type="submit" form={formOpts.id}>Oppdater</Button>
