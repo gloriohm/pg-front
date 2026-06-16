@@ -31,10 +31,11 @@
 				<option value="whole_day">Hele dagen</option>
 				<option value="before_time">Før klokkeslett</option>
 				<option value="after_time">Etter klokkeslett</option>
+				<option value="interval">Mellom klokkeslett</option>
 			</select>
 		</div>
 		<div class="grid gap-2">
-			<Label for="time">Klokkeslett</Label>
+			<Label for="time">Klokkeslett{#if selectedPriceType === "interval"}: fra{/if}</Label>
 			<Input
 				id="time"
 				name="time"
@@ -45,6 +46,20 @@
 				required={!disabled}
 			/>
 		</div>
+		{#if selectedPriceType === "interval"}
+			<div class="grid gap-2">
+			<Label for="end_time">Klokkeslett: til</Label>
+			<Input
+				id="end_time"
+				name="end_time"
+				type="time"
+				step="3600"
+				class="max-w-xs"
+				{disabled}
+				required={!disabled}
+			/>
+		</div>
+		{/if}
 	</div>
 	<Table.Root class="mb-4 w-full table-fixed">
 		<Table.Header>

@@ -73,7 +73,8 @@ export const actions = {
 			price: Number(form.price),
 			price_type: form.price_type,
 			days: formData.getAll('days'),
-			time: form.time
+			time: form.time,
+			end_time: form.end_time
 		};
 		console.log(payload);
 
