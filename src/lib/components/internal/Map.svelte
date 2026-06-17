@@ -6,7 +6,7 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { XIcon } from '@lucide/svelte';
 	import BarCard from './BarCard.svelte';
-	import { moveUserLocation } from '$lib/utils/location.js'
+	import { moveUserLocation, getPaddedBounds } from '$lib/utils/location.js'
 
 	let { initialCenter = [10.7522, 59.9139], initialZoom = 12 } = $props();
 
@@ -54,13 +54,13 @@
 	}
 
 	async function loadBarsInViewport() {
-		const bounds = map.getBounds();
+		const paddedBounds = getPaddedBounds(map);
 
 		const params = new URLSearchParams({
-			minLng: bounds.getWest(),
-			minLat: bounds.getSouth(),
-			maxLng: bounds.getEast(),
-			maxLat: bounds.getNorth(),
+			minLng: paddedBounds.minLng,
+			minLat: paddedBounds.minLat,
+			maxLng: paddedBounds.maxLng,
+			maxLat: paddedBounds.maxLat,
 			zoom: map.getZoom(),
 			viewportWidth: map.getContainer().clientWidth,
 			viewportHeight: map.getContainer().clientHeight
