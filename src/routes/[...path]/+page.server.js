@@ -19,28 +19,29 @@ const FYLKER = new Set([
 ]);
 
 export const load = ({ params, url }) => {
-	if (!params.path) return;
+	if (!params.path) {
+		error(404, 'Not found');
+	}
 
-	// split + normalize
 	const parts = params.path
 		.split('/')
 		.filter(Boolean)
 		.map((p) => p.toLowerCase());
 
-	if (parts.length > 3) return;
+	if (parts.length === 0 || parts.length > 3) {
+		error(404, 'Not found');
+	}
 
 	const [fylke, kommune, sted] = parts;
 
-	if (!FYLKER.has(fylke)) return;
+	if (!FYLKER.has(fylke)) {
+		error(404, 'Not found');
+	}
 
-	// preserve query string
-	const qs = url.search;
-
-	// build target dynamically
 	let target = `/liste/${fylke}`;
 
 	if (kommune) target += `/${kommune}`;
 	if (sted) target += `/${sted}`;
 
-	throw redirect(308, target + qs);
+	redirect(308, target + url.search);
 };
