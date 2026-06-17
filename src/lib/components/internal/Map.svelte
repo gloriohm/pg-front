@@ -6,6 +6,7 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { XIcon } from '@lucide/svelte';
 	import BarCard from './BarCard.svelte';
+	import { moveUserLocation } from '$lib/utils/location.js'
 
 	let { initialCenter = [10.7522, 59.9139], initialZoom = 12 } = $props();
 
@@ -210,6 +211,8 @@
 
 			// initial load
 			await loadBarsInViewport();
+
+			moveUserLocation(map)
 
 			// reload on viewport change
 			map.on('moveend', loadBarsInViewport);
