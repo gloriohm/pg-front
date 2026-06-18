@@ -50,7 +50,7 @@
 
 	function closeDialog() {
 		selectedBar = null;
-		//barDetails = null;
+		selectedFeatureId = null;
 	}
 
 	async function loadBarsInViewport() {
@@ -249,7 +249,7 @@
 <div class="relative h-150 w-full">
 	<div bind:this={mapContainer} class="h-full w-full"></div>
 
-	{#if selectedBar && barDetails}
+	{#if selectedBar}
 		<Card.Root class="absolute bottom-4 left-1/2 z-10 w-full max-w-sm -translate-x-1/2">
 			<Card.Header>
 				<Card.Title>{selectedBar.name}</Card.Title>
