@@ -40,7 +40,7 @@ export function moveUserLocation(map) {
     );
 }
 
-export function getPaddedBounds(map) {
+function getPaddedBounds(map) {
 	const bounds = map.getBounds();
 	const zoom = map.getZoom();
 
@@ -61,4 +61,19 @@ export function getPaddedBounds(map) {
 		maxLng: bounds.getEast() + lngPadding,
 		maxLat: bounds.getNorth() + latPadding
 	};
+}
+
+export function buildViewportParams(map) {
+    const paddedBounds = getPaddedBounds(map);
+    const container = map.getContainer();
+
+    return new URLSearchParams({
+        minLng: String(paddedBounds.minLng),
+        minLat: String(paddedBounds.minLat),
+        maxLng: String(paddedBounds.maxLng),
+        maxLat: String(paddedBounds.maxLat),
+        zoom: String(map.getZoom()),
+        viewportWidth: String(container.clientWidth),
+        viewportHeight: String(container.clientHeight)
+    });
 }

@@ -1,12 +1,12 @@
 <script>
-	import { onMount } from 'svelte';
 	import maplibregl from 'maplibre-gl';
-	import { PUBLIC_MAP_TILER_API_KEY } from '$env/static/public';
+	import { onMount } from 'svelte';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { XIcon } from '@lucide/svelte';
 	import BarCard from './BarCard.svelte';
-	import { moveUserLocation, getPaddedBounds } from '$lib/utils/location.js'
+	import { buildViewportParams, moveUserLocation } from '$lib/utils/location.js';
+	import { createMap, handleMapLoad, removeLayerInteractions, BAR_SOURCE_ID, emptyFeatureCollection } from '$lib/utils/map.js';
 
 	let { initialCenter = [10.7522, 59.9139], initialZoom = 12 } = $props();
 
@@ -15,22 +15,77 @@
 	let selectedBar = $state(null);
 	let barDetails = $state(null);
 	let selectedFeatureId = $state(null);
-
 	let barLoading = $state(false);
 	let barError = $state(null);
 
-	async function selectBar(feature) {
-		selectedBar = feature.properties;
+	let barDetailsAbortController;
+	let mapDataAbortController;
+	let cleanupMap;
 
+	async function loadBarsInViewport() {
+		if (!map?.getSource(BAR_SOURCE_ID)) return;
+
+		mapDataAbortController?.abort();
+		mapDataAbortController = new AbortController();
+
+		try {
+			const res = await fetch(`/bff/map?${buildViewportParams(map)}`, {
+				signal: mapDataAbortController.signal
+			});
+
+			if (!res.ok) {
+				throw new Error(`Failed to load bars (${res.status})`);
+			}
+
+			const bars = await res.json();
+			map.getSource(BAR_SOURCE_ID)?.setData(bars);
+		} catch (err) {
+			if (err?.name === 'AbortError') return;
+
+			console.error(err);
+			map.getSource(BAR_SOURCE_ID)?.setData(emptyFeatureCollection);
+		}
+	}
+
+	function getFeatureProperties(feature) {
+		return feature?.properties ?? null;
+	}
+
+	function handleFeatureClick(event) {
+		event.preventDefault();
+
+		const feature = event.features?.[0];
+		const id = getFeatureId(feature);
+
+		if (!id || selectedFeatureId === id) return;
+
+		void selectBar(feature);
+	}
+
+	function getFeatureId(feature) {
+		return String(feature?.properties?.id ?? '');
+	}
+
+	async function selectBar(feature) {
+		const properties = getFeatureProperties(feature);
+		const id = getFeatureId(feature);
+
+		if (!properties || !id) return;
+
+		selectedBar = properties;
+		selectedFeatureId = id;
+		barDetails = null;
 		barLoading = true;
 		barError = null;
 
-		try {
-			const params = new URLSearchParams({
-				id: selectedBar.id
-			});
+		barDetailsAbortController?.abort();
+		barDetailsAbortController = new AbortController();
 
-			const res = await fetch(`/bff/bar?${params}`);
+		try {
+			const params = new URLSearchParams({ id });
+			const res = await fetch(`/bff/bar?${params}`, {
+				signal: barDetailsAbortController.signal
+			});
 
 			if (!res.ok) {
 				throw new Error(`Failed to load bar (${res.status})`);
@@ -38,209 +93,44 @@
 
 			barDetails = await res.json();
 		} catch (err) {
+			if (err?.name === 'AbortError') return;
+
 			console.error(err);
-
 			barError = err instanceof Error ? err.message : 'Internal Server Error';
-
 			barDetails = null;
 		} finally {
-			barLoading = false;
+			if (selectedFeatureId === id) {
+				barLoading = false;
+			}
 		}
 	}
 
 	function closeDialog() {
+		barDetailsAbortController?.abort();
 		selectedBar = null;
+		barDetails = null;
 		selectedFeatureId = null;
-	}
-
-	async function loadBarsInViewport() {
-		const paddedBounds = getPaddedBounds(map);
-
-		const params = new URLSearchParams({
-			minLng: paddedBounds.minLng,
-			minLat: paddedBounds.minLat,
-			maxLng: paddedBounds.maxLng,
-			maxLat: paddedBounds.maxLat,
-			zoom: map.getZoom(),
-			viewportWidth: map.getContainer().clientWidth,
-			viewportHeight: map.getContainer().clientHeight
-		});
-
-		const res = await fetch(`/bff/map?${params}`);
-		const bars = await res.json();
-
-		map.getSource('bars')?.setData(bars);
+		barLoading = false;
+		barError = null;
 	}
 
 	onMount(() => {
-		map = new maplibregl.Map({
-			container: mapContainer,
-			style: `https://api.maptiler.com/maps/bright-v2/style.json?key=${PUBLIC_MAP_TILER_API_KEY}`,
-			center: initialCenter,
-			zoom: initialZoom
-		});
-
+		map = createMap(initialCenter, initialZoom, mapContainer);
 		map.addControl(new maplibregl.NavigationControl(), 'top-right');
+		
+		const onLoad = () => {
+			cleanupMap = handleMapLoad(map, loadBarsInViewport, handleFeatureClick);
+		};
 
-		map.on('load', async () => {
-			map.addSource('bars', {
-				type: 'geojson',
-				data: {
-					type: 'FeatureCollection',
-					features: []
-				}
-			});
-
-			map.addLayer({
-				id: 'bars-circle',
-				type: 'circle',
-				source: 'bars',
-				paint: {
-					'circle-radius': [
-						'interpolate',
-						['linear'],
-						['coalesce', ['get', 'cell_count'], 1],
-						1,
-						12,
-						5,
-						14,
-						15,
-						18,
-						40,
-						22
-					],
-					'circle-color': [
-						'interpolate',
-						['linear'],
-						['get', 'pint'],
-						70,
-						'#84cc16',
-						100,
-						'#fcd34d',
-						120,
-						'#ef4444'
-					],
-					'circle-stroke-width': 2,
-					'circle-stroke-color': '#ffffff',
-					'circle-opacity': 0.95
-				}
-			});
-
-			map.addLayer({
-				id: 'bars-price',
-				type: 'symbol',
-				source: 'bars',
-				layout: {
-					'text-field': ['to-string', ['get', 'pint']],
-					'text-size': 12,
-					'text-font': ['Open Sans Bold'],
-					'text-allow-overlap': true,
-					'text-ignore-placement': true
-				},
-				paint: {
-					'text-color': '#ffffff',
-					'text-halo-color': '#000000',
-					'text-halo-width': 0.8
-				}
-			});
-
-			map.addLayer({
-				id: 'bars-count-badge',
-				type: 'circle',
-				source: 'bars',
-				filter: ['>', ['get', 'cell_count'], 1],
-				paint: {
-					'circle-radius': 8,
-					'circle-color': '#f4f4f5',
-					'circle-stroke-width': 1,
-					'circle-stroke-color': '#18181b',
-					'circle-translate': [12, -12]
-				}
-			});
-
-			map.addLayer({
-				id: 'bars-count-text',
-				type: 'symbol',
-				source: 'bars',
-				filter: ['>', ['get', 'cell_count'], 1],
-				layout: {
-					'text-field': ['to-string', ['get', 'cell_count']],
-					'text-size': 10,
-					'text-font': ['Open Sans Bold'],
-					'text-allow-overlap': true,
-					'text-ignore-placement': true,
-					'text-offset': [1.2, -1.2]
-				},
-				paint: {
-					'text-color': '#18181b'
-				}
-			});
-
-			map.addLayer({
-				id: 'bars-name',
-				type: 'symbol',
-				source: 'bars',
-				layout: {
-					'text-field': ['get', 'name'],
-					'text-size': 11,
-					'text-font': ['Open Sans Semibold'],
-					'text-offset': [0, 1.5],
-					'text-anchor': 'top',
-					'text-radial-offset': [
-						'interpolate',
-						['linear'],
-						['coalesce', ['get', 'cell_count'], 1],
-						1,
-						1.6,
-						5,
-						1.8,
-						15,
-						2,
-						40,
-						2.6
-					],
-					'text-max-width': 10,
-					'text-allow-overlap': false
-				},
-				paint: {
-					'text-color': '#111827',
-					'text-halo-color': '#ffffff',
-					'text-halo-width': 1.5
-				}
-			});
-
-			// initial load
-			await loadBarsInViewport();
-
-			moveUserLocation(map)
-
-			// reload on viewport change
-			map.on('moveend', loadBarsInViewport);
-		});
-
-		for (const layer of ['bars-circle', 'bars-price']) {
-			map.on('mouseenter', layer, () => {
-				map.getCanvas().style.cursor = 'pointer';
-			});
-
-			map.on('mouseleave', layer, () => {
-				map.getCanvas().style.cursor = '';
-			});
-
-			map.on('click', layer, (event) => {
-				event.preventDefault();
-
-				const feature = event.features[0];
-				const id = feature.properties.id;
-
-				if (selectedFeatureId === id) return;
-
-				selectedFeatureId = id;
-				void selectBar(feature);
-			});
-		}
+		map.once('load', onLoad);
 
 		return () => {
+			barDetailsAbortController?.abort();
+			mapDataAbortController?.abort();
+
+			cleanupMap?.();
+			removeLayerInteractions(map, handleFeatureClick);
+
 			map?.remove();
 		};
 	});
@@ -255,7 +145,7 @@
 				<Card.Title>{selectedBar.name}</Card.Title>
 
 				<Card.Action>
-					<Button variant="ghost" onclick={closeDialog}>
+					<Button variant="ghost" onclick={closeDialog} aria-label="Lukk">
 						<XIcon />
 					</Button>
 				</Card.Action>
