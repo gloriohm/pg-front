@@ -108,39 +108,39 @@ function addPriceLayer(map) {
 }
 
 function addCountBadgeLayer(map) {
-    map.addLayer({
-        id: 'bars-count-badge',
-        type: 'circle',
-        source: BAR_SOURCE_ID,
-        filter: ['>', ['get', 'cell_count'], 1],
-        paint: {
-            'circle-radius': 8,
-            'circle-color': '#f4f4f5',
-            'circle-stroke-width': 1,
-            'circle-stroke-color': '#18181b',
-            'circle-translate': [12, -12]
-        }
-    });
+	map.addLayer({
+		id: 'bars-count-badge',
+		type: 'circle',
+		source: BAR_SOURCE_ID,
+		filter: ['>', ['get', 'cell_count'], 1],
+		paint: {
+			'circle-radius': 8,
+			'circle-color': '#f4f4f5',
+			'circle-stroke-width': 1,
+			'circle-stroke-color': '#18181b',
+			'circle-translate': [12, -12]
+		}
+	});
 }
 
 function addCountTextLayer(map) {
-    map.addLayer({
-        id: 'bars-count-text',
-        type: 'symbol',
-        source: BAR_SOURCE_ID,
-        filter: ['>', ['get', 'cell_count'], 1],
-        layout: {
-            'text-field': ['to-string', ['get', 'cell_count']],
-            'text-size': 10,
-            'text-font': ['Open Sans Bold'],
-            'text-allow-overlap': true,
-            'text-ignore-placement': true,
-            'text-offset': [1.2, -1.2]
-        },
-        paint: {
-            'text-color': '#18181b'
-        }
-    });
+	map.addLayer({
+		id: 'bars-count-text',
+		type: 'symbol',
+		source: BAR_SOURCE_ID,
+		filter: ['>', ['get', 'cell_count'], 1],
+		layout: {
+			'text-field': ['to-string', ['get', 'cell_count']],
+			'text-size': 10,
+			'text-font': ['Open Sans Bold'],
+			'text-allow-overlap': true,
+			'text-ignore-placement': true
+		},
+		paint: {
+			'text-color': '#18181b',
+			'text-translate': [12, -12]
+		}
+	});
 }
 
 function addNameLayer(map) {
