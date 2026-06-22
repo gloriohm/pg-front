@@ -1,6 +1,5 @@
 import maplibregl from 'maplibre-gl';
 import { PUBLIC_MAP_TILER_API_KEY } from '$env/static/public';
-import { moveUserLocation } from '$lib/utils/location.js';
 
 export const BAR_SOURCE_ID = 'bars';
 const CLICKABLE_LAYERS = ['bars-circle', 'bars-price'];
@@ -19,12 +18,12 @@ export function createMap(initialCenter, initialZoom, mapContainer) {
     });
 }
 
-export async function handleMapLoad(map, loadBarsInViewport, handleFeatureClick) {
+export async function handleMapLoad(map, loadBarsInViewport, handleFeatureClick, handleMapClick) {
     addBarsSource(map);
     console.log("bars source added")
     addBarsLayers(map);
     console.log("bars layers added")
-    addLayerInteractions(map, handleFeatureClick);
+    addLayerInteractions(map, handleFeatureClick, handleMapClick);
     console.log("layer interactions added")
 
     await loadBarsInViewport();
@@ -183,24 +182,68 @@ function setCursor(cursor, map) {
     map.getCanvas().style.cursor = cursor;
 }
 
-export function addLayerInteractions(map, handleFeatureClick) {
+export function addLayerInteractions(map, handleFeatureClick, handleMapClick) {
     if (typeof handleFeatureClick !== 'function') {
 		throw new TypeError('handleFeatureClick must be a function');
 	}
-    
+
     for (const layer of CLICKABLE_LAYERS) {
         map.on('mouseenter', layer, () => setCursor('pointer', map));
         map.on('mouseleave', layer, () => setCursor('', map));
         map.on('click', layer, handleFeatureClick);
+        map.on('click', handleMapClick);
     }
 }
 
-export function removeLayerInteractions(map, handleFeatureClick) {
+export function removeLayerInteractions(map, handleFeatureClick, handleMapClick) {
     if (!map) return;
 
     for (const layer of CLICKABLE_LAYERS) {
         if (!map.getLayer(layer)) continue;
 
         map.off('click', layer, handleFeatureClick);
+        map.off('click', handleMapClick);
     }
+}
+
+function moveUserLocation(map) {
+    if (!navigator.geolocation) {
+			return;
+		}
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            let userLocation = [
+                position.coords.longitude,
+                position.coords.latitude
+            ];
+            map.flyTo({
+                center: userLocation,
+                zoom: 15
+            });
+        }, 
+        (error) => {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    console.log('Location denied');
+                    break;
+
+                case error.POSITION_UNAVAILABLE:
+                    console.log('Location unavailable');
+                    break;
+
+                case error.TIMEOUT:
+                    console.log('Location timeout');
+                    break;
+
+                default:
+                    console.log('Unknown location error');
+            }
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 300000
+        }
+    );
 }

@@ -3,10 +3,17 @@
 	import { onMount } from 'svelte';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import { Input } from '$lib/components/ui/input/index.js';
 	import { XIcon } from '@lucide/svelte';
 	import BarCard from './BarCard.svelte';
-	import { buildViewportParams, moveUserLocation } from '$lib/utils/location.js';
+	import EnhancedForm from '@/components/internal/EnhancedForm.svelte';
+	import { buildViewportParams } from '$lib/utils/location.js';
 	import { createMap, handleMapLoad, removeLayerInteractions, BAR_SOURCE_ID, emptyFeatureCollection } from '$lib/utils/map.js';
+
+	const MAP_MODE = {
+		VIEW: 'view',
+		MOVE_BAR: 'move_bar'
+	};
 
 	let { initialCenter = [10.7522, 59.9139], initialZoom = 12 } = $props();
 
@@ -18,9 +25,24 @@
 	let barLoading = $state(false);
 	let barError = $state(null);
 
+	let mapMode = $state(MAP_MODE.VIEW);
+	let movingBar = $state(null);
+	let proposedLocation = $state(null);
+	let moveLoading = $state(false);
+	let moveError = $state(null);
+
+	const formOpts = {
+		method: 'POST',
+		id: 'update-location',
+		action: '',
+		successMsg: 'Bar flyttet!',
+		failureMsg: 'Noe gikk galt...',
+		onSuccess: cancelMoveBar
+	};
+
 	let barDetailsAbortController;
 	let mapDataAbortController;
-	let cleanupMap;
+	let cleanupMap = () => {};
 
 	async function loadBarsInViewport() {
 		if (!map?.getSource(BAR_SOURCE_ID)) return;
@@ -47,11 +69,35 @@
 		}
 	}
 
+	function startMovingBar() {
+		if (!selectedBar) return;
+
+		movingBar = selectedBar;
+		proposedLocation = {
+			lng: 0,
+			lat: 0
+		};
+		moveError = null;
+		mapMode = MAP_MODE.MOVE_BAR;
+
+		closeDialog();
+	}
+
+	function cancelMoveBar() {
+		mapMode = MAP_MODE.VIEW;
+		movingBar = null;
+		proposedLocation = null;
+		moveLoading = false;
+		moveError = null;
+	}
+
 	function getFeatureProperties(feature) {
 		return feature?.properties ?? null;
 	}
 
 	function handleFeatureClick(event) {
+		if (mapMode === MAP_MODE.MOVE_BAR) return;
+
 		event.preventDefault();
 
 		const feature = event.features?.[0];
@@ -60,6 +106,15 @@
 		if (!id || selectedFeatureId === id) return;
 
 		void selectBar(feature);
+	}
+
+	function handleMapClick(event) {
+		if (mapMode !== MAP_MODE.MOVE_BAR) return;
+
+		proposedLocation = {
+			lng: event.lngLat.lng,
+			lat: event.lngLat.lat
+		};
 	}
 
 	function getFeatureId(feature) {
@@ -116,10 +171,13 @@
 
 	onMount(() => {
 		map = createMap(initialCenter, initialZoom, mapContainer);
-		map.addControl(new maplibregl.NavigationControl(), 'top-right');
-		
+
 		const onLoad = () => {
-			cleanupMap = handleMapLoad(map, loadBarsInViewport, handleFeatureClick);
+			const cleanup = handleMapLoad(map, loadBarsInViewport, handleFeatureClick, handleMapClick);
+
+			if (typeof cleanup === 'function') {
+				cleanupMap = cleanup;
+			}
 		};
 
 		map.once('load', onLoad);
@@ -128,12 +186,12 @@
 			barDetailsAbortController?.abort();
 			mapDataAbortController?.abort();
 
-			cleanupMap?.();
-			removeLayerInteractions(map, handleFeatureClick);
+			map.off('load', onLoad);
+			cleanupMap();
 
 			map?.remove();
-		};
-	});
+	};
+});
 </script>
 
 <div class="relative h-150 w-full">
@@ -158,8 +216,41 @@
 					<p>{barError}</p>
 				{:else if barDetails}
 					<BarCard bar={barDetails} />
+					<Button type="button" variant="outline" onclick={startMovingBar}>
+						Juster plassering
+					</Button>
 				{/if}
 			</Card.Content>
 		</Card.Root>
 	{/if}
+	{#if mapMode === MAP_MODE.MOVE_BAR}
+		<Card.Root class="absolute bottom-4 left-1/2 z-10 w-full max-w-sm -translate-x-1/2">
+			<Card.Header>
+				<Card.Title>Flytter {movingBar?.name}</Card.Title>
+				<Card.Description>
+					{#if proposedLocation}
+						Ny plassering: {proposedLocation.lat.toFixed(6)}, {proposedLocation.lng.toFixed(6)}
+					{:else}
+						Trykk på kartet for å velge ny plassering
+					{/if}
+				</Card.Description>
+			</Card.Header>
+
+			<Card.Content>
+				{#if moveError}
+					<p class="text-sm text-red-600">{moveError}</p>
+				{/if}
+				<EnhancedForm opts={formOpts}>
+					<Input hidden name="bar_id" value={movingBar.id} />
+					<Input hidden name="lat" value={proposedLocation.lat} />
+					<Input hidden name="lng" value={proposedLocation.lng} />
+				</EnhancedForm>
+			</Card.Content>
+			<Card.Footer class="flex-col gap-2">
+				<Button onclick={cancelMoveBar} class="w-full" variant="outline">Avbryt</Button>
+				<Button type="submit" class="w-full" form={formOpts.id}>Bekreft</Button>
+			</Card.Footer>
+		</Card.Root>
+	{/if}
 </div>
+
