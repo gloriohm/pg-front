@@ -4,6 +4,7 @@
 	import Breadcrumb from '@/components/internal/Breadcrumb.svelte';
 	import CustomTimeButton from '@/components/internal/CustomTimeButton.svelte';
 	import NavGroup from '@/components/internal/NavGroup.svelte';
+	import Stats from '@/components/internal/Stats.svelte';
 	import { H2 } from '@/styles/styles.js';
 	let { data } = $props();
 
@@ -24,6 +25,7 @@
 		<NavGroup links={data.list.links} opts={url} />
 	</div>
 	<h2 class={H2}>Ølpriser – {title}</h2>
+	<Stats stats={data.list.stats}/>
 	<div class="mb-2">
 		<CustomTimeButton />
 	</div>
