@@ -1,14 +1,19 @@
 <script>
 	import '../app.css';
+	import { page } from '$app/state';
 	import favicon from '$lib/assets/favicon.png';
 	import Footer from '@/components/internal/Footer.svelte';
 	import Header from '@/components/internal/Header.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Toaster } from '$lib/components/ui/sonner/index.js';
 	import { setConsent } from '$lib/utils/cookies';
+	import { Page } from '@/components/ui/breadcrumb';
 
 	let { children, data } = $props();
-	let showCookiesBanner = $state(!data.consent);
+	let showCookiesBanner = $derived(!data.consent);
+	let url = page.url.pathname;
+	let canon = "https://www.pilsguiden.no" + url
+	console.log(url)
 
 	function setConsentWrapper(consent) {
 		showCookiesBanner = false;
@@ -23,7 +28,7 @@
         name="description"
         content="Få oversikt over ølpriser i Norge"
     />
-    <link rel="canonical" href="https://www.pilsguiden.no" />
+    <link rel="canonical" href={canon} />
 </svelte:head>
 
 <Header />
