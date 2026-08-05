@@ -11,9 +11,7 @@
 
 	let { children, data } = $props();
 	let showCookiesBanner = $derived(!data.consent);
-	let url = page.url.pathname;
-	let canon = "https://www.pilsguiden.no" + url
-	console.log(url)
+	let canon = $derived("https://www.pilsguiden.no" + page.url.pathname);
 
 	function setConsentWrapper(consent) {
 		showCookiesBanner = false;
